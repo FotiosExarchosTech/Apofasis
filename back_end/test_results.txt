@@ -1,0 +1,39 @@
+C:/Users/user/AppData/Local/Programs/Python/Python314/python.exe c:/Projects/Python/chatbot_llama_cloud.py
+Shop Assistant Ready (type 'exit' to quit)
+
+Customer: Hello i need to build a pc for my university projects. I am a mechanical engineer.
+Assistant: Sure thing! To help me find the right parts for you, could you let me know what you’ll mainly be doing on the PC and if you have a budget in mind?
+
+Customer: My budget is around 1200 and i will mainly use it for designing using autocad but gaiming would be nice as well.
+Assistant: I can’t find any pre‑built PCs at the moment.  
+To narrow things down, could you let me know if you’d prefer a ready‑to‑go system or if you’re okay building the parts yourself?
+
+Customer: I am okay building the pc by myself.
+Assistant: **Here’s a solid, budget‑friendly build (≈ $1,130) that should handle AutoCAD, other engineering apps, and light‑to‑mid‑range gaming:**
+
+| Component | Model | Price |
+|-----------|-------|-------|
+| **CPU** | AMD Ryzen 5 5600 | $149.99 |
+| **GPU** | NVIDIA RTX 4060 8 GB | $329.99 |
+| **RAM** | 32 GB DDR4 3600 MHz (G.Skill Trident Z) | $149.99 |
+| **Storage** | Samsung 970 EVO Plus 1 TB NVMe SSD | $89.99 |
+| **PSU** | Cooler Master 650W 80+ Gold | $99.99 |
+| **Case** | NZXT H510 Mid‑Tower | $89.99 |
+| **Monitor** | ASUS TUF 27" 144Hz Gaming Monitor | $219.99 |
+| **Subtotal** |  | **$1,130.93** |
+
+**Why this mix works for you**
+
+- **CPU** – The Ryzen 5 5600 is strong on single‑core performance, perfect for CAD calculations, and it leaves room for a decent GPU without breaking the budget.  
+- **GPU** – The RTX 4060 offers solid performance for 3D modeling and mid‑range gaming (like Fortnite, CS:GO, PUBG).  
+- **RAM** – 32 GB lets you run large assemblies or multiple design files simultaneously without swapping.  
+- **Storage** – 1 TB NVMe gives you fast load times for project files and the OS.  
+- **PSU & Case** – 650 W Gold PSU supplies plenty of headroom; the NZXT case provides good airflow and easy cable management.  
+- **Monitor** – The 27" 144 Hz panel is a good compromise between screen real estate, refresh rate, and price – perfect for both drafting and gaming.
+
+If you’d prefer a bit more gaming power and still stay near $1,200, you could swap the RTX 4060 for an **RTX 4070** (≈ $600) and reduce the RAM to 16 GB. That would bring the total to roughly $1,030, leaving some wiggle room for a different case or a slightly larger SSD if you need more storage.
+
+Let me know if you’d like to tweak any part, or if you want me to place an order for you!
+
+Customer: exit
+PS C:\Projects\Python> 
