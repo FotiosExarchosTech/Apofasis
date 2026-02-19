@@ -112,7 +112,4 @@ document.addEventListener('DOMContentLoaded', () => {
             this.style.overflowY = "hidden";
         }
     });
-
-
-    
 });
