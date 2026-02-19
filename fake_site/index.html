@@ -1,43 +1,133 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-    <meta charset="UTF-8">
-    <title>TechStore</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>TechStore</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+#popup{
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+/* Dark overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease;
+    z-index: 9998;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Sliding Chat Panel */
+.chat-modal {
+    position: fixed;
+    top: 0;
+    left: -400px;
+    width: 400px;
+    height: 100%;
+    background: white;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.3);
+    transition: left 0.4s ease;
+    z-index: 9999;
+}
+
+.chat-modal.open {
+    left: 0;
+}
+
+.chat-modal iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 10000;
+}
+</style>
 </head>
+
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-dark mb-4 sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">TechStore</a>
-        </div>
-    </nav>
-
+<nav class="navbar navbar-dark bg-dark mb-4 sticky-top">
     <div class="container">
-        <div class="row">
-            
-            <div class="col-md-3">
-                <div class="card p-3 shadow-sm border-0 sticky-top" style="top: 80px;">
-                    <h5 class="mb-3">Κατηγορίες</h5>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-outline-dark text-start active" onclick="filterProducts('all', this)">📦 Όλα</button>
-                        <button class="btn btn-outline-dark text-start" onclick="filterProducts('laptops', this)">💻 Laptops</button>
-                        <button class="btn btn-outline-dark text-start" onclick="filterProducts('phones', this)">📱 Smartphones</button>
-                        <button class="btn btn-outline-dark text-start" onclick="filterProducts('audio', this)">🎧 Ήχος</button>
-                    </div>
+        <a class="navbar-brand fw-bold" href="index.html">TechStore</a>
+        <button id="popup">Ai helper</button>
+    </div>
+</nav>
+
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+
+<!-- Sliding Chat -->
+<div id="chatModal" class="chat-modal">
+    <span class="close-btn">&times;</span>
+    <iframe src="ui.html"></iframe>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-0 sticky-top" style="top: 80px;">
+                <h5 class="mb-3">Κατηγορίες</h5>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-dark text-start active" onclick="filterProducts('all', this)">📦 Όλα</button>
+                    <button class="btn btn-outline-dark text-start" onclick="filterProducts('laptops', this)">💻 Laptops</button>
+                    <button class="btn btn-outline-dark text-start" onclick="filterProducts('phones', this)">📱 Smartphones</button>
+                    <button class="btn btn-outline-dark text-start" onclick="filterProducts('audio', this)">🎧 Ήχος</button>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-9">
-                <h2 id="category-title" class="mb-4">Όλα τα Προϊόντα</h2>
-                <div id="product-grid" class="row row-cols-1 row-cols-md-3 g-4">
-                    </div>
-            </div>
+        <div class="col-md-9">
+            <h2 id="category-title" class="mb-4">Όλα τα Προϊόντα</h2>
+            <div id="product-grid" class="row row-cols-1 row-cols-md-3 g-4"></div>
         </div>
     </div>
+</div>
 
-    <script>
-        // the products
+<script>
+// Chat open / close
+const popupBtn = document.getElementById("popup");
+const modal = document.getElementById("chatModal");
+const closeBtn = document.querySelector(".close-btn");
+const overlay = document.getElementById("overlay");
+
+popupBtn.addEventListener("click", () => {
+    modal.classList.add("open");
+    overlay.classList.add("active");
+});
+
+function closeChat(){
+    modal.classList.remove("open");
+    overlay.classList.remove("active");
+}
+
+closeBtn.addEventListener("click", closeChat);
+overlay.addEventListener("click", closeChat);
+</script>
+
+<!-- YOUR PRODUCTS SCRIPT (unchanged) -->
+<script>
+// the products
         const products = [
     // laptops
     {
@@ -228,6 +318,7 @@
         }
 
         displayProducts(products);
-    </script>
+</script>
+
 </body>
 </html>
