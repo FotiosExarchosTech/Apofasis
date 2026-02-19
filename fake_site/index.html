@@ -79,6 +79,7 @@
 
 <!-- Sliding Chat -->
 <div id="chatModal" class="chat-modal">
+    
     <iframe src="ui.html"></iframe>
 </div>
 
@@ -107,7 +108,6 @@
 // Chat open / close
 const popupBtn = document.getElementById("popup");
 const modal = document.getElementById("chatModal");
-const closeBtn = document.querySelector(".close-btn");
 const overlay = document.getElementById("overlay");
 
 popupBtn.addEventListener("click", () => {
@@ -120,7 +120,6 @@ function closeChat(){
     overlay.classList.remove("active");
 }
 
-closeBtn.addEventListener("click", closeChat);
 overlay.addEventListener("click", closeChat);
 </script>
 
@@ -319,5 +318,19 @@ overlay.addEventListener("click", closeChat);
         displayProducts(products);
 </script>
 
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatModal = document.getElementById('chatModal');
+
+            // Ακούει για κλικ σε όλο το κεντρικό παράθυρο του site
+            window.addEventListener('click', (event) => {
+                // Αν το κλικ έγινε ακριβώς πάνω στο φόντο (chatModal)
+                if (event.target === chatModal) {
+                    closeChat();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+
