@@ -39,51 +39,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = userInput.value.trim();
         if (text === '') return; 
 
-        // 1. Print the user's prompt
+        // 1. Εμφάνιση μηνύματος χρήστη & Καθαρισμός input
         appendMessage('user', text);
         userInput.value = '';
-        // resizing after clearing or sending the message
-        function resetInputHeight() {
-            userInput.style.height = '24px';
-        }
+        userInput.style.height = '24px'; // Επαναφορά μεγέθους
+        userInput.focus();
 
-        userInput.style.height = '24px';
-
-        // 2. Show the AI thinking
+        // 2. Εμφάνιση αναμονής AI
         showTypingIndicator();
 
-        // 3. Take the data from the site
-        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        
-        chrome.tabs.sendMessage(tab.id, { action: "getPageDetails" }, async (pageData) => {
-            
-            try {
-                // sending the request to the  local python server
-                // The python server interacts with ollama
-                const response = await fetch('http://127.0.0.1:5000/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        question: text,       // user's prompt
-                        context: pageData,    // specs/reviews of the product
-                        model: "llama3"       // (optional) says to python which model we prefer
-                    })
-                });
+        try {
+            // 3. ΑΠΕΥΘΕΙΑΣ ΚΛΗΣΗ ΣΤΗΝ PYTHON (Χωρίς scraping)
+            const response = await fetch('http://127.0.0.1:5000/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: text // Στέλνουμε ΜΟΝΟ την ερώτηση πλέον
+                })
+            });
 
-                if (!response.ok) throw new Error('Network response was not ok');
+            if (!response.ok) throw new Error('Network response was not ok');
 
-                const data = await response.json();
+            const data = await response.json();
 
-                // 4. Print the response
-                removeTypingIndicator();
-                appendMessage('ai', data.reply);
+            // 4. Εμφάνιση απάντησης από το Backend
+            removeTypingIndicator();
+            appendMessage('ai', data.reply);
 
-            } catch (error) {
-                removeTypingIndicator();
-                appendMessage('ai', 'Σφάλμα: Δεν μπορώ να συνδεθώ με τον Server.');
-                console.error('Error:', error);
-            }
-        });
+        } catch (error) {
+            removeTypingIndicator();
+            appendMessage('ai', 'Σφάλμα: Δεν μπορώ να συνδεθώ με τον Python Server. Βεβαιώσου ότι τρέχει στο localhost:5000.');
+            console.error('Error:', error);
+        }
     }
 
     // The user can either click the send button or click Enter
