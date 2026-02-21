@@ -1,27 +1,24 @@
+import os # Στελιο καλο θα ειναι αν χρησιμοποιησεις κατι απο αυτην την βιβλιοθηκη να εισαι υπερβολικα προσεκτικος γιατι μπορει να κανεις χοντρη βλακεια.
+
 from ollama import Client
+from flask_cors import CORS
+from flask import Flask, request, jsonify 
 import json
 import sqlite3 as sql
+
+# =========================
+# FOR THE SERVER
+# =========================
+
+app = Flask(__name__)
+CORS(app)
 
 # =========================
 # DATABASE SETUP
 # =========================
 
-database = sql.connect('Dimitris.db')
-cursor = database.cursor()
-
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS Products (
-    productId INTEGER PRIMARY KEY AUTOINCREMENT,
-    quantity INTEGER,
-    type TEXT,
-    kind TEXT,
-    title TEXT,
-    description TEXT,
-    price REAL
-)
-''')
-
-database.commit()
+def get_database():
+    return sql.connect('Dimitris.db')
 
 # =========================
 # OLLAMA FUNCTIONS
@@ -29,7 +26,7 @@ database.commit()
 
 client = Client(
     host="https://ollama.com",
-    headers={"Authorization": "Bearer " + "Your ollama api key."}
+    headers={"Authorization": "Bearer " + "2e78e803123a4b3cb25aa584cd694177.QMXq3Z-g4mMbPVnl4xgHqjV6"}
 )
 
 def ask_llm(prompt):
@@ -73,6 +70,9 @@ def ask_llm_silent(prompt):
 # =========================
 
 def search_products(keyword=None, max_price=None, product_type=None, product_kind=None):
+    database = get_database()
+    cursor = database.cursor()
+
     query = """
     SELECT title, description, price, quantity
     FROM Products
@@ -97,7 +97,10 @@ def search_products(keyword=None, max_price=None, product_type=None, product_kin
         params.append(f"%{product_kind}%")
 
     cursor.execute(query, params)
-    return cursor.fetchall()
+    results = cursor.fetchall()
+    database.close()
+
+    return results
 
 # =========================
 # EXTRACT FILTERS USING OLLAMA
@@ -152,7 +155,7 @@ def generate_answer(user_input, products):
     else:
         formatted_products = "\n".join([f"- {p[0]} | ${p[2]} | Stock: {p[3]}" for p in products])
 
-    instructions = open("Instructions.txt", "r")
+    instructions = open("back_end\\Instructions.txt", "r")
 
     prompt = f"""
     Customer question:
@@ -176,12 +179,89 @@ def generate_answer(user_input, products):
 
     conversation_history += f"\nAssistant: {answer}"
 
-    return answer
+    return jsonify({"reply": answer})
+
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    global conversation_history
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"reply": "Invalid request"}), 400
+
+    user_input = data.get("question", "")
+    page_context = data.get("context", "")
+    model_name = data.get("model", "gpt-oss:20b-cloud")
+
+    if not user_input:
+        return jsonify({"reply": "Empty message"}), 400
+
+    # Step 1: Extract filters
+    filters = extract_filters(user_input)
+
+    # Step 2: Search database
+    products = search_products(
+        keyword=filters.get("keyword"),
+        max_price=filters.get("max_price"),
+        product_type=filters.get("product_type"),
+        product_kind=filters.get("product_kind")
+    )
+
+    # Format products
+    if not products:
+        formatted_products = "NO PRODUCTS FOUND"
+    else:
+        formatted_products = "\n".join(
+            [f"- {p[0]} | ${p[2]} | Stock: {p[3]}" for p in products]
+        )
+
+    total_price = sum([p[2] for p in products]) if products else 0
+
+    # Load instructions safely
+    with open("back_end/Instructions.txt", "r", encoding="utf-8") as f:
+        instructions = f.read()
+
+    prompt = f"""
+    Customer question:
+    {user_input}
+
+    Website context:
+    {page_context}
+
+    Available products:
+    {formatted_products}
+
+    Conversation so far:
+    {conversation_history}
+
+    Total price:
+    {total_price}
+
+    Instructions:
+    {instructions}
+    """
+
+    answer = ask_llm(prompt)
+
+    conversation_history += f"\nCustomer: {user_input}"
+    conversation_history += f"\nAssistant: {answer}"
+
+    return jsonify({"reply": answer})
+
 
 # =========================
 # MAIN LOOP
 # =========================
 
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
+
+
+
+
+#Terminal loop
+'''
 print("Shop Assistant Ready (type 'exit' to quit)\n")
 
 while True:
@@ -206,3 +286,4 @@ while True:
     # Step 3: Generate answer
     generate_answer(user_input, products)
     print()
+'''

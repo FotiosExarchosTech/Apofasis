@@ -1,9 +1,27 @@
 #Stelio don't run this unless the database is empty.
 
 # database_helper.py
-import sqlite3
+import sqlite3 as sql
 
 DB_NAME = "Dimitris.db"
+
+def init():
+    database = sql.connect(DB_NAME)
+
+    cursor = database.cursor()
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Products (
+        productId INTEGER PRIMARY KEY AUTOINCREMENT,
+        quantity INTEGER,
+        type TEXT,
+        kind TEXT,
+        title TEXT,
+        description TEXT,
+        price REAL
+    )'''
+    )
+    database.commit()
 
 def add_product(quantity, type_, kind, title, description, price):
     """Add a product to the existing Dimitris.db database"""
