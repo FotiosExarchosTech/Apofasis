@@ -28,10 +28,6 @@
                     <span id="p-brand" class="badge bg-secondary mb-2"></span>
                     
                     <h1 id="product-title" class="fw-bold mt-2"></h1>
-                    
-                    <div class="mb-3 text-warning">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
 
                     <h2 id="p-price" class="text-danger fw-bold display-6"></h2>
 
@@ -367,7 +363,38 @@
         image: 'https://d2e6ccujb3mkqf.cloudfront.net/35fef6fb-df24-484b-b4d0-95b235303cf2.jpg',
         specs: { cpu: 'Tensor G2', ram: '8GB', storage:'128GB', camera: '50MP + 12MP', battery: '4355mAh' },
         reviews: ['Το καλύτερο point-and-shoot κινητό.', 'Καθαρό Android χωρίς bloatware.', 'Ο αισθητήρας δακτυλικού έχει θεματάκια.']
-    }
+    },
+
+    // =========================
+    // PC
+    // =========================
+
+    {
+        id: 46, category: 'pc', brand: '-', title: 'Vengeance Kraken-V79 Gaming Desktop PC', price: '1.499 €', 
+        image: 'https://d.scdn.gr/images/sku_main_images/060343/60343397/xlarge_20250512112156_vengeance_kraken_v79_gaming_desktop_pc_ryzen_9_7900_32gb_ddr5_1tb_ssd_no_os.jpeg',
+        specs: { cpu: 'AMD Ryzen 9-7900', ram: '32GB DDR5', storage: 'SSD 1TB', gpu: 'RΤX 5060 8GB', rgb: 'yes' },
+        reviews: ["Αξίζει τα λεφτά του.", "Τέλειο !"]
+    },
+
+    {
+        id: 49, category: 'pc', brand: '-', title: 'Phantom X Budget Gaming PC', price: '999 €',
+        image: 'https://a.scdn.gr/images/sku_main_images/037217/37217571/xlarge_20220719120212_vengeance_phantom_x_gaming_desktop_pc_ryzen_5_5500_16gb_ddr4_512gb_ssd_geforce_gtx_1650_no_os.jpeg',
+        specs: { cpu: 'Ryzen 5 5600', ram: '16GB DDR4', storage: '1TB SSD', gpu: 'RTX 3060 12GB', rgb: 'Yes' },
+        reviews: ["Τέλειο για 1080p gaming.", "Value for money build."]
+    },
+    {
+        id: 51, category: 'pc', brand: '-', title: 'Nova Creator Workstation PC', price: '3.299 €',
+        image: 'https://a.scdn.gr/images/sku_main_images/064514/64514063/xlarge_20251204162735_nova_nova_series_desktop_pc_ryzen_7_8700g_32gb_ddr5_1tb_ssd_no_os.jpeg',
+        specs: { cpu: 'Ryzen 9 7950X', ram: '64GB DDR5', storage: '4TB NVMe', gpu: 'RTX 4090 24GB', rgb: 'Minimal' },
+        reviews: ["Τέρας για video editing.", "Render times στο μισό."]
+    },
+    {
+        id: 52, category: 'pc', brand: '-', title: 'Stealth Office Pro Desktop', price: '799 €',
+        image: 'https://bbpcdn.pstatic.gr/bpimg3/2mpOEP/1VI9bE_SX660/1768905734/i-abox-office-value-v2.webp',
+        specs: { cpu: 'Intel Core i5-12400', ram: '16GB DDR4', storage: '512GB SSD', gpu: 'Integrated UHD 730', rgb: 'No' },
+        reviews: ["Ιδανικό για γραφείο.", "Αθόρυβο και οικονομικό."]
+    },
+
 ];
 
         // logic for finding the right product
@@ -444,12 +471,11 @@
             const reviewsDiv = document.getElementById('reviews-container');
             product.reviews.forEach(r => {
                 reviewsDiv.innerHTML += `
-                    <div class="card mb-3 review-card">
-                        <div class="card-body">
-                            <div class="text-warning small mb-1">★★★★★</div>
-                            <p class="review-text mb-0">${r}</p>
-                        </div>
-                    </div>`;
+    <div class="card mb-3 review-card">
+        <div class="card-body">
+            <p class="review-text mb-0">${r}</p>
+        </div>
+    </div>`;
             });
             document.title = product.title + " - TechStore";
         } else {
